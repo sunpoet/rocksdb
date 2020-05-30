@@ -1225,10 +1225,12 @@ if(WITH_BENCHMARK_TOOLS)
   target_link_libraries(range_del_aggregator_bench
     ${ROCKSDB_LIB})
 
-  add_executable(table_reader_bench
-    table/table_reader_bench.cc)
-  target_link_libraries(table_reader_bench
-    ${ROCKSDB_LIB} testharness)
+  if(WITH_TESTS)
+    add_executable(table_reader_bench
+      table/table_reader_bench.cc)
+    target_link_libraries(table_reader_bench
+      ${ROCKSDB_LIB} testharness)
+  endif()
 
   add_executable(filter_bench
     util/filter_bench.cc)
@@ -1250,7 +1252,9 @@ if(WITH_CORE_TOOLS OR WITH_TOOLS)
 endif()
 
 if(WITH_TOOLS)
-  add_subdirectory(db_stress_tool)
-  add_custom_target(tools
-    DEPENDS ${tool_deps})
+  if(WITH_TESTS)
+    add_subdirectory(db_stress_tool)
+    add_custom_target(tools
+      DEPENDS ${tool_deps})
+  endif()
 endif()
